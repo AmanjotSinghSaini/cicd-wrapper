@@ -1,0 +1,54 @@
+name: Docker CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '20 8 * * *'
+
+jobs:
+  build-and-scan:
+    uses: AmanjotSinghSaini/cicd-templates/.github/workflows/ci-template.yml@main
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    with:
+      image_name: ghcr.io/amanjotsinghsaini/flask-web-app
+      image_tag: v2.0.0  # or 'latest' 
+
+      dockerfile_path: ./Dockerfile
+      context: .
+      build_args: "--no-cache"
+
+      run_gitleaks: true
+      gitleaks_fetch_depth: 1
+      continue_on_gitleaks_error: false
+
+      run_owasp: true
+      continue_on_owasp_error: false
+
+      run_pytest: true
+      continue_on_pytest_error: true
+
+      run_trivy: true
+      continue_on_trivy_error: false
+
+      image_size_threshold_mb: 300        
+      continue_on_size_check_error: false 
+
+      push_to_ecr: true
+      ecr_repository: image-from-github
+
+      run_sonar: true
+      sonar_host_url: http://15.206.89.140:9000
+      sonar_project_key: sonar-scan
+      sonar_project_name: sonar-scan
+
+      slack_enabled: true
+      slack_channel: '#github-actions-notification'

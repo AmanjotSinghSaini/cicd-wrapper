@@ -1,0 +1,21 @@
+name: Deploy Wrapper
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: AmanjotSinghSaini/cicd-templates/.github/workflows/cd-template.yml@main
+    with:
+      ecr_repo: 370389955750.dkr.ecr.ap-south-1.amazonaws.com/image-from-github
+      eks_cluster_name: github-actions-deployment
+      deployment_mode: singlefile              # or: filenames, recursive
+      deployment_file: ./deployment.template.yaml
+      #deployment_files: ./deployment.yaml,./service.yaml,./ingress.yaml  # only needed for filenames mode
+      continue_on_validation_error: false
+      delete_old_images: false
+
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}

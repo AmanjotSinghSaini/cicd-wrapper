@@ -60,7 +60,7 @@ Make sure your repository includes the following:
   - Node.js: `package.json`
   - Java: `pom.xml`, `build.gradle`, etc.
 - (Optional) A SonarQube project already created if `run_sonar` is enabled  
-  🔗 [Create a SonarQube project](https://docs.sonarsource.com/sonarqube/latest/project-administration/adding-a-project/)
+  🔗 [Create a SonarQube project](https://docs.sonarsource.com/sonarqube-server/2026.1/project-administration/creating-project)
 - (Optional) Slack channel created and Slack webhook URL generated (if `slack-enabled` is true)  
   🔗 [Set up a Slack webhook](https://api.slack.com/messaging/webhooks)
 
